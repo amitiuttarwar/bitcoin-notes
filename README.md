@@ -1,0 +1,1 @@
+my misc notes as I learn bitcoin things
