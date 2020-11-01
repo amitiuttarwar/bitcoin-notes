@@ -63,3 +63,11 @@
   - gets the `CAddrInfo` of the `CService` object
 	- updates `nLastSuccess`, `nLastTry`, `nAttempts`
 	- does NOT update `ntime`
+
+### Serialization
+- `CAddrInfo` uses the #define `SERIALIZE_METHODS`, and is serialized into
+  `peers.dat`. The definition says first (un)serialize the `CAddress` part of
+  the object, then (un)serialize the additional fields (`source`,
+  `nLastSuccess`, `nAttempts`).
+- `CAddrMan` doesn't used `SERIALIZE_METHODS`, but rather defines its own
+  serialization & deserialization functions.
