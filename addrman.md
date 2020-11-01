@@ -47,3 +47,19 @@
     `nLastCountAttempt` on the `CService`
   - `m_tried_collisions` - holds the address collisions from tried table so
     test-before-evict can resolve
+
+### useful functions
+- `PeerManager::FinalizeNode`
+
+- `CAddrMan::Connected` - looks up the `CService` object to retrieve
+  `CAddrInfo` and update the `ntime``
+  - call graph: `Connected` <- `FinalizeNode` <- `DeleteNode` <-
+    `DisconnectNodes` and `StopNodes`
+
+- `CAddrMan::Find` - looks up the `CNetAddr` in `mapAddr` to get the node id,
+  then looks it up in `mapInfo` to return the `CAddrInfo`.
+
+- `CAddrMan::Good_`
+  - gets the `CAddrInfo` of the `CService` object
+	- updates `nLastSuccess`, `nLastTry`, `nAttempts`
+	- does NOT update `ntime`
