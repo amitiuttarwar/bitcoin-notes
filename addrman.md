@@ -87,7 +87,11 @@
 
 
 - `CAddrman::Attempt_`
-  - updates `nLastTry`
+  - takes in a `CService` object, looks up the associated `CAddrInfo` object. 
+    If found, updates `nLastTry`. 
+  - If the info's `nLastCountAttempt` was before the last time `Good` was 
+    called (stored on `CAddrMan.nLastGood`), update the `nLastCountAttempt` 
+    to now, and increment the `nAttempts` counter. 
 
 - `CAddrman::IsTerrible`: returns a bool based on usefulness of address
   - if address was tried in in the last minute (`nLastTry`), return false
