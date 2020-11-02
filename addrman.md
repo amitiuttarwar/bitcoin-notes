@@ -66,9 +66,11 @@
 - `PeerManager::FinalizeNode`
 
 - `CAddrMan::Connected` - looks up the `CService` object to retrieve
-  `CAddrInfo` and update the `ntime``
+  `CAddrInfo` and update the `ntime`
   - call graph: `Connected` <- `FinalizeNode` <- `DeleteNode` <-
     `DisconnectNodes` and `StopNodes`
+  - the header comment is misleading, says "Mark an entry as currently-connected-to." 
+    but really we only call on disconnecting.
 
 - `CAddrMan::Find` - looks up the `CNetAddr` in `mapAddr` to get the node id,
   then looks it up in `mapInfo` to return the `CAddrInfo`.
