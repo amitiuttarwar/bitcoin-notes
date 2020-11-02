@@ -99,6 +99,12 @@
     return true
   - if none of these conditions match, return false
 
+- `CAddrMan::Select`
+  - takes in a boolean that defaults to false called `newOnly`
+  - chooses an address to connect to
+  - if `newOnly` is true, it chooses a node from the new table
+  - otherwise, it has a 50% chance for choosing between new and tried table
+
 
 ### Serialization
 - `CAddrInfo` uses the #define `SERIALIZE_METHODS`, and is serialized into
