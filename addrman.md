@@ -26,10 +26,24 @@
 - `CAddrInfo` - inherits from `CAddress` with extra application level info
   about this address as a (potential) peer.
     - `nLastTry`
+      - updated in `Good_` and `Attempt_`
+      - read from in `ThreadOpenConnections` to not try recently tried nodes until
+        we have at least 30 failed attempts
+      - read from in `IsTerrible`
+      - read from in `GetChance` to deprioritize recent attempts
     - `nLastCountAttempt`
     - `source` - what `CNetAddr` told us about this address?
     - `nLastSuccess` - last successful connection by us
+      - updated in `Good_`
+      - serialized into `peers.dat`
+      - read from in `IsTerrible`
+      - read from in `ResolveCollisions_`
     - `nAttempts` - # of attempts since last successful
+      - serialized into `peers.dat`
+      - read from in `IsTerrible`
+      - read from in `GetChance` to deprioritize based on failed attempts
+      - zeroed out in `Good_`
+      - incremented in `Attempt_`
     - `nRefCount`
     - `fInTried` - in tried set?
     - `nRandomPos` - position in `vRandom`
@@ -63,6 +77,28 @@
   - gets the `CAddrInfo` of the `CService` object
 	- updates `nLastSuccess`, `nLastTry`, `nAttempts`
 	- does NOT update `ntime`
+	- moves address from new to tried table
+	- check & store any tried table collisions
+
+  - call graph: when processing the `VERSION` message,
+    `PeerManager::ProcessMessage` will invoke `CConnman::MarkAddressGood` for
+    any outbound address. the `CConnman` function simply forwards the call
+    along to `CAddrMan::Good`
+
+
+- `CAddrman::Attempt_`
+  - updates `nLastTry`
+
+- `CAddrman::IsTerrible`: returns a bool based on usefulness of address
+  - if address was tried in in the last minute (`nLastTry`), return false
+  - if the `nTime` is more than 10 mins in the future, return true
+  - if the `nTime` has been set, but is more than 30 days old, return true
+  - if we've tried >3 times (`nAttempts`), but never had a success
+    (`nLastSuccess` is still 0), return true
+  - if we haven't had a success in 1 week & have attempted more than 10 times,
+    return true
+  - if none of these conditions match, return false
+
 
 ### Serialization
 - `CAddrInfo` uses the #define `SERIALIZE_METHODS`, and is serialized into
