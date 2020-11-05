@@ -22,6 +22,36 @@
 
 - `CAddress` - represents the addr message, which is why its in `protocol.h`.
   inherits from `CService` and adds `nServices` and `nTime`.
+  - `nTime` - used in `IsTerrible` decisions & serialized into addr messages
+    - updated in `CAddrMan::Connected` when we disconnect or stop the nodes
+    - updated in `net.cpp#convertSeed6` for seed nodes to a random time between
+      1-2 weeks ago
+    - updated in `net.cpp#GetLocalAddress` to be the time called
+    - read in `ConnectNode` for debug printing
+    - NOT read in `CConnman::InactivityCheck`
+    - NOT updated in `CAddrMan::Good`
+    - updated in `ThreadDNSAddressSeed` when loading DNS seed addresses
+    - when processing an `ADDR` message, if the `nTime` is < 100000000, or more
+      than 10 mins in the future, we reset it to be 5 days ago.
+    - when processing an `ADDR` message, we then use `nTime` being less than 10
+      mins ago to decide whether we relay this address to other nodes
+    - we return it in the RPC `getnodeaddresses.time`
+    - in the RPC `addpeeraddress`, we set `nTime` to be now
+    - use it to decide if an address `IsTerrible` if its more than 10 min in
+      the future, or if its more than 30 days old
+    - periodically updated in `CAddrMan::Add_`
+    - updated in `Connected_`
+
+  - serialization of a `CAddress` in regards to `nTime`
+    - according to comments in `CAddress` serialization, only time we serialize a
+      `CAddress` object without `nTime` is in the initial `VERSION` messages (2
+      `CAddress` records: from and to.)
+    - we look at the `nVersion` (serialization version) to decide whether or not
+      we serialize with `nTime`. This is set when processing the `VERSION`
+      message from the peer.
+
+  Q: so, we populate `nTime` when we self-advertise? with what?
+  -> oh, maybe we don't use this serialization method when self-advertising
 
 - `CAddrInfo` - inherits from `CAddress` with extra application level info
   about this address as a (potential) peer.
@@ -69,7 +99,7 @@
   `CAddrInfo` and update the `ntime`
   - call graph: `Connected` <- `FinalizeNode` <- `DeleteNode` <-
     `DisconnectNodes` and `StopNodes`
-  - the header comment is misleading, says "Mark an entry as currently-connected-to." 
+  - the header comment is misleading, says "Mark an entry as currently-connected-to."
     but really we only call on disconnecting.
 
 - `CAddrMan::Find` - looks up the `CNetAddr` in `mapAddr` to get the node id,
@@ -89,11 +119,11 @@
 
 
 - `CAddrman::Attempt_`
-  - takes in a `CService` object, looks up the associated `CAddrInfo` object. 
-    If found, updates `nLastTry`. 
-  - If the info's `nLastCountAttempt` was before the last time `Good` was 
-    called (stored on `CAddrMan.nLastGood`), update the `nLastCountAttempt` 
-    to now, and increment the `nAttempts` counter. 
+  - takes in a `CService` object, looks up the associated `CAddrInfo` object.
+    If found, updates `nLastTry`.
+  - If the info's `nLastCountAttempt` was before the last time `Good` was
+    called (stored on `CAddrMan.nLastGood`), update the `nLastCountAttempt`
+    to now, and increment the `nAttempts` counter.
 
 - `CAddrman::IsTerrible`: returns a bool based on usefulness of address
   - if address was tried in in the last minute (`nLastTry`), return false
