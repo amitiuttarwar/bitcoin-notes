@@ -4,8 +4,10 @@
 
 ### relevant init options
 `-addnode` -> add a node to connect to
-`-connect` -> connect only to the specified node. `-noconnect` disables
-automatic connections
+
+`-connect` -> connect only to the specified node. 
+
+`-noconnect` disables automatic connections
 
 
     argsman.AddArg("-discover", "Discover own IP addresses (default: 1 when listening and no -externalip or -proxy)", ArgsManager::ALLOW_ANY, OptionsCategory::CONNECTION);
@@ -21,5 +23,3 @@ automatic connections
         if (args.SoftSetBoolArg("-listen", false))
             LogPrintf("%s: parameter interaction: -connect set -> setting -listen=0\n", __func__);
     }
-
-### on startup
