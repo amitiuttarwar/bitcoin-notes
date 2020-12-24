@@ -1,11 +1,11 @@
-# Unit Test Basics
+### Unit Test Basics
 - When adding a new unit test, add to list in `src/Makefile.test.include`
 - Recompile the unit tests: `make check`
 - Recompile just the test directory: `make -j7 -C src/test`
 - Run a single test: `src/test/test_bitcoin --run_test=TEST-SUITE-NAME/TEST-CASE-NAME`
 - Example: `make -j7 src/bitcoind && make -j7 -C src/test && src/test/test_bitcoin --run_test=txrebroadcast_tests/recency`
 
-# Unit Test Available Helpers
+### Unit Test Available Helpers
 - `setup_common.{h, cpp}` defines `BasicTestingSetup`, `TestingSetup`,
   `RegTestingSetup` and `TestChain100Setup`. These fixtures enable starting a
   test in a reasonable state.
@@ -16,20 +16,20 @@
   the way. This can be used with `mempool.addUnchecked` to submit a transaction
   into the mempool, bypassing policy checks.
 
-# Logging Basics
+### Logging Basics
 - `fprintf` prints to wherever you tell it, and gives lots of warnings about
   types being specified very precisely.
   eg: `fprintf(stderr, "txhsh: %s, wtxhsh: %s\n", tx_parent.GetHash(), tx_parent.GetWitnessHash())`
 - `logprintf` is much better. It also saves to debug log.
   eg: `LogPrintf("txhsh: %s, wtxhsh: %s\n", tx_parent.GetHash(), tx_parent.GetWitnessHash())`
 
-# Logging Miscallaneous Useful Info
+### Logging Miscallaneous Useful Info
 - To monitor logs from unit tests, update the `arguments` in the
   `BasicTestingSetup` constructor -> update `-printtoconsole=1`, and add any
   relevant categories to debug, eg. `-debug=net`.
 - `FormatScript` for printing out a `CScript` object.
 
-# Useful Learnings (from attempts to form a transaction)
+### Useful Learnings (from attempts to form a transaction)
 - `CMutableTransaction` is used when populating the fields, then finalized into
   `CTransaction`, which can also be accessed through a `CTransactionRef`
   object.
