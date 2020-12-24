@@ -3,7 +3,7 @@ links:
 [pr](https://github.com/bitcoin/bitcoin/pull/20726)
 
 # bip
-*motivation:*
+### motivation:
 - block-relay-only connections were introduced in #15759, they set transaction
   relay field to false to disable transaction relay & ignore addr messages
   received from the peer
@@ -19,7 +19,7 @@ links:
 - also, the peer receiving the connection does not know that the incoming
   connection will ignore relayed addresses
 
-*specification:*
+### specification:
 - new `blockrelay` message is an empty message where `pchCommand == "blockrelay"`
 - protocol version of nodes implementing this BIP must be 70018 or higher
 - if a node sets the transaction relay field to false (in the version message),
@@ -37,13 +37,13 @@ links:
 
 ### questions
 - if a node is sending a `blockrelay` message, does it have to set the
-  transaction relay field (in the version message) to false?
+  transaction relay field (in the version message) to false? -> yes
 - can a node send `blockrelay` message before version?
 - could two nodes send each other `blockrelay` messages? would anything change?
 - what about other cases where addr relay isn't desired? such as `-connect`
 
-# pr20726
-*PR description:*
+# pr 20726
+**PR description:**
 - adds new P2P message `BLOCKRELAY` to be sent between `VERSION` and `VERACK`
 - use receipt of `BLOCKRELAY` message to stop relaying `ADDR` messages to
   inbound block-relay-only peers.
@@ -51,14 +51,8 @@ links:
 - future changes: save memory by not allocating peer data structures for
   transaction & address relay (`m_tx_relay` and `m_addr_known`)
 
-*review conversation:*
-
-sipa review comment:
-- implementation only announces in outbound direction
-- disconnects if message is received from full-relay outbound peer
-
 ### implementation
-*commit 1*: Add `blockrelay` feature negotiation message support
+**commit 1:** Add `blockrelay` feature negotiation message support
 - send the `blockrelay` message to outbound block-relay-only peers
 - bumps the `PROTOCOL_VERSION` to `70018`
 - adds the new protocol message to `protocol.{h, cpp}`
@@ -68,13 +62,13 @@ sipa review comment:
   `fSuccessfullyConnected` is already set (aka `VERACK` has been received),
   then disconnect the peer. otherwise, ignore.
 
-*commit 2*: Add `inbound-block-relay` connection type
+**commit 2:** Add `inbound-block-relay` connection type
 - adds new `ConnectionType::INBOUND_BLOCK_RELAY`
 - `m_conn_type` is changed from a `const` to a `std::atomic`
 - new function `CNode::UpdateConnectionType`, which is only enabled for
   converting `INBOUND` into `INBOUND_BLOCK_RELAY`
 
-*commit 3*: Update connection type of peer after BLOCKRELAY message
+**commit 3:** Update connection type of peer after BLOCKRELAY message
 - in `ProcessMessage::BLOCKRELAY`, add some checks & logic:
   - if node is an `OUTBOUND_FULL_RELAY` or `ADDR_FETCH`, and they send you a
     `BLOCKRELAY` message, then disconnect and find another peer
@@ -87,9 +81,9 @@ sipa review comment:
     addresses to {which?} peers, and ensure `BLOCKRELAY` peer doesn't send us
     other disallowed messages (mempool, filterload/add/clear, etc.)
 
-*commit 4*: Test that inbound-block-relay peers don't get addrs
+**commit 4:** Test that inbound-block-relay peers don't get addrs
 
-todo:
+**todo:**
 - check all call sites of `IsInboundConn` and `ConnectionType::INBOUND` to see
   if any are missing `INBOUND_BLOCK_RELAY`
 - why does the connection type need to be updated from `INBOUND` to
@@ -115,15 +109,14 @@ todo:
   separate type from `BLOCK_RELAY_ONLY`?
 - why is connection type now a `uint32_t`?
 
-### nits
-*commit 1*
+### feedback
+- `IsBlockOnlyConn` should either be updated to return both types, or the name
+  changed.
+
+**commit 1 nits**
 - `version.h#BLOCK_RELAY_VERSION` can be a `constexpr` instead of a `const`, as
   well as `protocol.h#BLOCKRELAY`
 - `net_processing` checks `nVersion`, but the other similar checks look at
   `greatest_common_version`
 - commit message: we ignore the blockrelay command unless its received after
   `VERACK`, then we disconnect
-
-### feedback
-- `IsBlockOnlyConn` should either be updated to return both types, or the name
-  changed.
