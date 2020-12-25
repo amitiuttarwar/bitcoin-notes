@@ -68,7 +68,7 @@ links:
 - new function `CNode::UpdateConnectionType`, which is only enabled for
   converting `INBOUND` into `INBOUND_BLOCK_RELAY`
 
-**commit 3:** Update connection type of peer after BLOCKRELAY message
+**commit 3:** Update connection type of peer after `blockrelay` message
 - in `ProcessMessage::BLOCKRELAY`, add some checks & logic:
   - if node is an `OUTBOUND_FULL_RELAY` or `ADDR_FETCH`, and they send you a
     `BLOCKRELAY` message, then disconnect and find another peer
@@ -84,34 +84,22 @@ links:
 **commit 4:** Test that inbound-block-relay peers don't get addrs
 
 **todo:**
-- check all call sites of `IsInboundConn` and `ConnectionType::INBOUND` to see
-  if any are missing `INBOUND_BLOCK_RELAY`
-- why does the connection type need to be updated from `INBOUND` to
-  `INBOUND_BLOCK_RELAY`?
-- understand when `m_tx_relay` and `m_addr_known` are allocated. really just
-  catalog the interface for `m_tx_relay`, and look into the review comments
-  john has left / improvement suhas has open?
-- in commit #2, there's an assert added to `SendMessages` before we self
-  advertise to check that `m_addr_known` is not a nullptr. This seems slightly
-  out of place, can this be wrapped into the `RelayAddrsWithConn` function?
 - double check send/process messages for different transaction & address
   relaying mechanisms
-- think through: in commit #3, based on the implementation, outbound full relay
-  and addr fetch connections won't actually send you `BLOCKRELAY` messages, but
-  another implementation might do that differently, right?
-- if an inbound connection sends you a `BLOCKRELAY` message, then sends you
-  another `BLOCKRELAY` message, I think this crashes the process?
-- think through testing?
+- think through testing
 
 ### questions
 - why does the protocol version get bumped by 2? (70016 -> 70018)
-- does it make sense / is it necessary for `INBOUND_BLOCK_RELAY` to be a
-  separate type from `BLOCK_RELAY_ONLY`?
 - why is connection type now a `uint32_t`?
 
 ### feedback
+- `INBOUND_BLOCK_RELAY` can be indicated as a subset of `INBOUND`
 - `IsBlockOnlyConn` should either be updated to return both types, or the name
   changed.
+- If we keep `INBOUND_BLOCK_RELAY` as a separate connection type, might be
+  worth adding to the first assertion in `CConnman::OpenNetworkConnection`
+- https://github.com/bitcoin/bitcoin/pull/20726#pullrequestreview-558732015
+
 
 **commit 1 nits**
 - `version.h#BLOCK_RELAY_VERSION` can be a `constexpr` instead of a `const`, as
