@@ -18,7 +18,8 @@
   bitcoin core for `DisconnectedBlockTransactions` to sort the blocks in the
   order they appeared in the blockchain.
 
-### Defining the index
+## Defining the index
+`indexed_by` defines a list of index specifications:
 ```
 typedef multi_index_container <
   CLASS_NAME,
@@ -29,28 +30,22 @@ typedef multi_index_container <
 > CONTAINER_NAME;
 ```
 
-- each argument to `indexed_by` is called an `index specifier`
-
 `INDEX_TYPES:`
-- `ordered_unique`
-- `ordered_non_unique`
+- `ordered_unique` / `ordered_non_unique`
 - `hashed_unique`
 - `sequenced`
 
 `INFO`:
 - depending on the index type specified, the specifier might need additional
   information, or have optional fields
-- `tag`
-- `identity`
-- `member`
-
----
-
-- `indexed_by` defines a list of index specifications. each one can be called a
-  "comparison predicate"
+- `tag`: for convenience when retrieving
+- `identity`: eg. `ordered_unique<identity<employee>>`, sorts by
+  `employee::operator<`
+- `member`: eg. `ordered_unique<member<employee, int, &employee::ssnumber>>`,
+  sorts by `less<int>` on `ssnumber`
 
 
-### Accessing the index
+## Accessing the index
 - indices can be accessed via `get<NUM>`
 - if a `tag` is specified, its an easier way to retreive an index, instead of
   specifying the index by order number `get<NAME>`. must be a c++ type
@@ -67,4 +62,31 @@ typedef multi_index_container <
   `multi_index_container` object without using `get<0>()`
 eg. `CONTAINER_NAME.get<0>`
 
--
+
+## Index Types
+*Ordered indices*
+- sorted like a `std::set` and provides a similar interface
+- `ordered_unique` & `ordered_non_unique`
+- sort according to a specified key & associated comparison predicate
+- must follow the following syntax, where `(tag)[,` ... `]` is optional
+```
+(ordered_unique | ordered_non_unique)<[(tag)[,(key extractor)[, (comparison
+predicate)]]]>
+```
+
+*Ranked indices*
+- similar to ordered, extra capabilities for querying & accessing elements
+  based on their rank (the numerical position they occupy in the index)
+
+*Sequenced indices*
+- modeled after interface of `std::list`, arrange elements as if in a
+  bidirectional list
+
+*Hashed indices*
+- fast access to elements through hashing, similar to unordered associative
+  containers `std::unordered_set` and `std::unordered_multiset`
+
+*Random access indices*
+- similar interface to sequenced, with additional random access iterators &
+  positional access to elements
+
