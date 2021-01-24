@@ -55,8 +55,7 @@ typedef multi_index_container <
   from the default of `std::less<std::string>`
 
 
-## Examples with terminology
-# TODO: fill this section out
+## Examples
 `indexed_by<INDEX_TYPE<[(TAG) [, KEY_EXTRACTOR [, COMPARISON_PREDICATE]]]>>`
 
 ## Accessing the index
@@ -64,7 +63,7 @@ typedef multi_index_container <
 - if a `tag` is specified, its an easier way to retreive an index, instead of
   specifying the index by order number `get<NAME>`. must be a c++ type
 
-`const CONTAINER_NAME::nth_index<NUM>::type& VAR_NAME = CONTAINER_NAME.get<NUM>();`
+eg. `const CONTAINER_NAME::nth_index<NUM>::type& VAR_NAME = CONTAINER_NAME.get<NUM>();`
 - `CONTAINER_NAME` is the name of the `boost::multi_index_container`
 - `NUM` matches up with the comparison predicate
 - `type` keyword indicates its the type of the index
@@ -106,7 +105,6 @@ struct (ranked_unique | ranked_non_unique);
 - replicates public interface of ordered indices, differences:
     -> deletion is logarithmic (instead of constant) time
     -> worse execution time & memory consumption because if rank bookkeeping
--
 
 **Sequenced indices**
 - modeled after interface of `std::list`, arrange elements as if in a
