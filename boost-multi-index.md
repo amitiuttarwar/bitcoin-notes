@@ -2,11 +2,11 @@
 `https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/tutorial/basics.html`
 
 ## Examples
-- use case: multiple sorts on a single set, according to different keys
+use case: multiple sorts on a single set, according to different keys
 - for this, we use ordered indices
 - in isolation, each index behaves similar to a `std::set`
 
-- use case: bidirectional list with fast lookup
+use case: bidirectional list with fast lookup
 - a `std::list` is usually a doubly-linked list, so supports constant time
   insertion & removal of elements from anywhere in the container, if you pass
   in the iterator to the element. for an example where you'd parse text into
@@ -29,7 +29,6 @@ typedef multi_index_container <
   >
 > CONTAINER_NAME;
 ```
-
 `INDEX_TYPES:`
 - `ordered_unique` / `ordered_non_unique`
 - `hashed_unique`
@@ -39,11 +38,26 @@ typedef multi_index_container <
 - depending on the index type specified, the specifier might need additional
   information, or have optional fields
 - `tag`: for convenience when retrieving
-- `identity`: eg. `ordered_unique<identity<employee>>`, sorts by
+- `identity`: key extractor, eg. `ordered_unique<identity<employee>>`, sorts by
   `employee::operator<`
-- `member`: eg. `ordered_unique<member<employee, int, &employee::ssnumber>>`,
-  sorts by `less<int>` on `ssnumber`
+- `member`: key extractor, eg. `ordered_unique<member<employee, int,
+  &employee::ssnumber>>`, sorts by `less<int>` on `ssnumber`. `member` is used
+  to extract the `ssnumber` part of the `employee` object. The key type of the
+  index is an `int`
+- lots of other predefined key extractors & can also be user defined. [more
+  reading](https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/tutorial/key_extraction.html)
+- comparison predicates: must order the keys in less-than order. by default, if
+  no comparison predicate is provided, index will sort the elements by
+  `std::less<key_type>`, where `key_type` comes from the second element of the
+  `member <>` section. you can define a different comparison criteria with an
+  additional param in the index declaration. eg. `member <CLASS_NAME,
+  std::string, CLASS_NAME:MEMBER_VAR>, std::greater<std::string>` overwrites
+  from the default of `std::less<std::string>`
 
+
+## Examples with terminology
+# TODO: fill this section out
+`indexed_by<INDEX_TYPE<[(TAG) [, KEY_EXTRACTOR [, COMPARISON_PREDICATE]]]>>`
 
 ## Accessing the index
 - indices can be accessed via `get<NUM>`
@@ -64,7 +78,7 @@ eg. `CONTAINER_NAME.get<0>`
 
 
 ## Index Types
-*Ordered indices*
+**Ordered indices**
 - sorted like a `std::set` and provides a similar interface
 - `ordered_unique` & `ordered_non_unique`
 - sort according to a specified key & associated comparison predicate
@@ -73,20 +87,45 @@ eg. `CONTAINER_NAME.get<0>`
 (ordered_unique | ordered_non_unique)<[(tag)[,(key extractor)[, (comparison
 predicate)]]]>
 ```
-
-*Ranked indices*
+**Ranked indices**
 - similar to ordered, extra capabilities for querying & accessing elements
   based on their rank (the numerical position they occupy in the index)
+- `ranked_unique` and `ranked_non_unique`
 
-*Sequenced indices*
+```
+template<
+  typename TagList,
+  typename KeyFromValue,
+  typename Compare=std::less<KeyFromValue::result_type>
+>
+struct (ranked_unique | ranked_non_unique);
+```
+
+- docs: https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/reference/rnk_indices.html
+- the `rank` of an element = beginning of index ---distance---> element
+- replicates public interface of ordered indices, differences:
+    -> deletion is logarithmic (instead of constant) time
+    -> worse execution time & memory consumption because if rank bookkeeping
+-
+
+**Sequenced indices**
 - modeled after interface of `std::list`, arrange elements as if in a
-  bidirectional list
+  bidirectional list. don't enforce any order.
+- sequenced index iterators point to values that are treated at constant ->
+  cannot be directly changed. this is to enforce use of the [update
+  operators](https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/tutorial/basics.html#seq_updating)(`replace`
+  & `modify`) to modify the elements.
 
-*Hashed indices*
+**Hashed indices**
 - fast access to elements through hashing, similar to unordered associative
   containers `std::unordered_set` and `std::unordered_multiset`
 
-*Random access indices*
+**Random access indices**
 - similar interface to sequenced, with additional random access iterators &
   positional access to elements
 
+## Other cool stuff
+- `.project` can be used to retrieve an index-2-iterator form an
+  index-1-iterator, pointing to the same element of the container.
+- direct node manipulation can pass elements between `multi_index_containers`
+  without copying them (provided for all index types)
