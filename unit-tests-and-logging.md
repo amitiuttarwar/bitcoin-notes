@@ -23,7 +23,7 @@
 - `logprintf` is much better. It also saves to debug log.
   eg: `LogPrintf("txhsh: %s, wtxhsh: %s\n", tx_parent.GetHash(), tx_parent.GetWitnessHash())`
 
-### Logging Miscallaneous Useful Info
+### Logging Miscellaneous Useful Info
 - To monitor logs from unit tests, update the `arguments` in the
   `BasicTestingSetup` constructor -> update `-printtoconsole=1`, and add any
   relevant categories to debug, eg. `-debug=net`.

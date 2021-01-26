@@ -100,7 +100,7 @@ template<
 struct (ranked_unique | ranked_non_unique);
 ```
 
-- docs: https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/reference/rnk_indices.html
+- [docs](https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/reference/rnk_indices.html)
 - the `rank` of an element = beginning of index ---distance---> element
 - replicates public interface of ordered indices, differences:
     -> deletion is logarithmic (instead of constant) time
@@ -121,6 +121,12 @@ struct (ranked_unique | ranked_non_unique);
 **Random access indices**
 - similar interface to sequenced, with additional random access iterators &
   positional access to elements
+
+## Key Extractors
+[link](https://www.boost.org/doc/libs/1_75_0/libs/multi_index/doc/reference/key_extraction.html#key_extractors)
+- identity, member, and 12 others are pre-defined by boost libraries
+- this fulfills the `KeyFromValue` part of the boost template
+- can also write custom extractors, which is most common in bitcoin
 
 ## Other cool stuff
 - `.project` can be used to retrieve an index-2-iterator form an
