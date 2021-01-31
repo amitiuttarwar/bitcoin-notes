@@ -24,5 +24,6 @@
 	* build, run, ssh, go into depends..
 
 ### Resolved questions:
-*question: what boost am I using?*
+**question: what boost am I using?**
+
 Can use `otool -L src/bitcoind` to discover the library paths
