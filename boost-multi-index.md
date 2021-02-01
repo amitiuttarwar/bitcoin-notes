@@ -75,6 +75,15 @@ eg. `const CONTAINER_NAME::nth_index<NUM>::type& VAR_NAME = CONTAINER_NAME.get<N
   `multi_index_container` object without using `get<0>()`
 eg. `CONTAINER_NAME.get<0>`
 
+## Editing elements in the Index
+- the main way to update elements is via `replace` or `modify`
+- to use `replace`, create a new Entry, look up the previous one in the index &
+  replace it. the downside of this is create a whole second copy of the Entry.
+- to use `modify`, you look up the Entry you want to edit, then give it
+  something that serves like a function, aka where the function operator is
+  defined: `()`. you can do this by defining a struct or class that overloads
+  `()`, or by passing through a lambda.
+- `template <typename Modifier> void modify(Modifier ure, iterator it) { ure(it); update_indexes(it); }`
 
 ## Index Types
 **Ordered indices**
