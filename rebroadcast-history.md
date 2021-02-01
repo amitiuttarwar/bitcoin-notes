@@ -34,11 +34,10 @@ we can observe the expected behavior under current network conditions. And I'm
 seeking reviewer feedback to think through edge cases that could arise.
 
 ## bitcoin-core-dev IRC meeting on transaction rebroadcasting
-On 07/25/2019, I proposed transaction rebroadcast as a [meeting
+On 07/25/2019, we discussed transaction rebroadcast as a [meeting
 topic](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-389),
-and proposed an approach for moving the rebroadcast logic from the wallet to
-the node. Here I will capture some of the highlights from that discussion, as
-well as my responses.
+focused on an approach for moving the rebroadcast logic from the wallet to
+the node. Here I will capture some of the highlights from that discussion.
 
 - A central design question is whether the bandwidth increase is acceptable.
 
@@ -47,7 +46,7 @@ well as my responses.
 
 - "Does this help with privacy? the first node broadcasting something will
   still be the same one"
-  [link](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-399).
+  ([link](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-399)).
 
   These changes do not impact transaction _broadcast_- aka the first time a
   transaction gets announced to the network. However, they seek to improve the
@@ -58,7 +57,7 @@ well as my responses.
 
 - In addition to creating decoy transactions for wallet nodes to hide
   their transactions in, these changes could aid general transaction relay
-  [link](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-389).
+  ([link](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-389)).
 
 ```
 <wumpus> so basically all nodes would create noise for the nodes with a wallet to hide in, hmm
@@ -78,7 +77,7 @@ well as my responses.
 
 - harding brought up a use case where users may rely on wallet rebroadcast
   logic to get a successful initial broadcast
-  [link](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-399).
+  ([link](http://www.erisian.com.au/bitcoin-core-dev/log-2019-07-25.html#l-399)).
   This lead to the ideation of a "ever broadcast" flag.
 
   This was implemented as the "unbroadcast" set in [PR #18038](https://github.com/bitcoin/bitcoin/pull/18038).
