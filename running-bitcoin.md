@@ -21,7 +21,7 @@ to handle the negation.
 
 
 ## Start a Bitcoin node from scratch on Unix machine
-1. Generate a new SSH key and add to ssh-agent [docs](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+1. Generate a new SSH key and add to ssh-agent ([docs](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
 ```bash
 ssh-keygen -t ed25519 -C "amiti@uttarwar.org" // generate a key to
 ~/.ssh/id_ed25519{.pub}
@@ -29,14 +29,14 @@ eval "$(ssh-agent -s)" // start ssh agent
 ssh-add ~/.ssh/id_ed25519 // add private key to ssh agent
 ```
 
-2. Add SSH key to Github account [docs](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
+2. Add SSH key to Github account ([docs](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account))
 - copy contents of `~/.ssh/id_ed25519.pub`
 - github > settings > SSH and GPG keys > New SSH key
 
 3. Get bitcoin core
 `git clone git@github.com:bitcoin/bitcoin.git`
 
-4. Build bitcoin [docs](https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md)
+4. Build bitcoin ([docs](https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md))
 ```bash
 cd bitcoin
 
