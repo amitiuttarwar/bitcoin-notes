@@ -2,12 +2,20 @@
 - install ccache
 - update to use bitcoind daemon command
 - install berkeleydb to compile with wallet
+- enable logging through conf file
+  - where do I find all options for conf file?
+- make custom mempool expiry / size
 
 ## Monitor & Interact with a running bitcoin node
 - watch logs: `tail -f stdout.log`
-- default data dir: `~/.bitcoin/`
+- default data dir for linux: `~/.bitcoin/`
 - `src/bitcoin-cli [RPC COMMAND]`
   - `logging` to see what categories are enabled
+  - `src/bitcoin-cli -rpcuser=user -rpcpassword=password logging "[\"net\",
+    \"mempool\"]"` to enable net & mempool log categories
+  - `bitcoin-cli getpeerinfo | grep bound | sort | uniq -c` to see number of
+    connections by type (false = outbound, true = inbound)
+- [bitcoin/files.md](https://github.com/bitcoin/bitcoin/blob/master/doc/files.md) great docs of all the explanations
 
 ## Startup options
 To view the options: `bitcoind -help` & `bitcoind -help-debug`
@@ -58,3 +66,9 @@ make -j5
 sudo apt install daemonize
 daemonize -c $HOME -e stderr.log -o stdout.log $HOME/bitcoin/src/bitcoind -txindex -debug=mempool,net,bench
 ```
+
+## Setting up a server
+- add ssh key: `echo “[SSH KEY]” >> ~/.ssh/authorized_keys`
+- ssh forwarding
+- become root: `sudo su -`
+- add sudo permissions to my user `usermod -a -G sudo [USERNAME]`
