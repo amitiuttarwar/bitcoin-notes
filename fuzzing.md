@@ -47,3 +47,8 @@ FUZZ=process_message src/test/fuzz/fuzz qa-assets/fuzz_seed_corpus/process_messa
 - `pulse` is a  heartbeat when running through the corpus seeds
 - `INITED` means fuzzer has run through all corpus seeds and will start
   mutating afterwards
+
+### coverage reports
+- how to generate the colored html output: [link](https://github.com/MarcoFalke/btc_cov/blob/cd1b2a714aa99be3a9fd2bc68a2308c49f36fd76/.cirrus.yml#L65)
+- Marco's coverage report: [link](https://marcofalke.github.io/btc_cov/fuzz.coverage/index.html)
+- aj mentioned: `make fuzz.coverage/.dirstamp` or `make cov` more generally
