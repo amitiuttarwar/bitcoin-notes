@@ -6,9 +6,11 @@ A fun C++ puzzle from jnewbery
 
 ```
 #include <iostream>
+
 int one() {
     return 1;
 }
+
 int main()
 {
     int& ref = one();
@@ -16,7 +18,7 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 1 Analysis </summary> 
+<details><summary> Snippet 1 Analysis </summary>
 
 - Doesn't compile: `error: non-const lvalue reference to type 'int' cannot bind
   to a temporary of type 'int'`.
@@ -33,9 +35,11 @@ int main()
 
 ```
 #include <iostream>
+
 int one() {
     return 1;
 }
+
 int main()
 {
     const int& ref = one();
@@ -43,7 +47,7 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 2 Analysis </summary> 
+<details><summary> Snippet 2 Analysis </summary>
 
 - Compiles and is safe.
 - Even though this code creates a reference to a temporary object, the C++
@@ -58,9 +62,11 @@ int main()
 
 ```
 #include <iostream>
+
 const int& one() {
     return 1;
 }
+
 int main()
 {
     const int& ref = one();
@@ -68,7 +74,7 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 3 Analysis </summary> 
+<details><summary> Snippet 3 Analysis </summary>
 
 - Compiles but is unsafe, throws `warning: returning reference to local
   temporary object`.
@@ -80,9 +86,11 @@ int main()
 
 ```
 #include <iostream>
+
 int& one() {
     return 1;
 }
+
 int main()
 {
     const int& ref = one();
@@ -97,5 +105,56 @@ int main()
 - The mismatch of type occurs at the `return 1` statement, `1` is a temporary
   and the function `one()` tried to return `int&`, which is a non-const lvalue
   reference.
+
+</details>
+
+```
+#include <iostream>
+
+const char* one() {
+    return "one";
+}
+
+int main()
+{
+    const auto& ref = one();
+    std::cout << ref << std::endl;
+    return 0;
+}
+```
+<details><summary> Snippet 5 Analysis </summary>
+
+- Compiles and is safe.
+- String literals have static storage duration, so the string "one" will exist
+  for the duration of the program. Thus `ref` can safely refer to this part of
+  memory.
+- Side note: it will be stored in the DATA segment of memory, which is separate
+  from the heap or the stack. ([stack overflow
+  explanation](https://stackoverflow.com/questions/93039/where-are-static-variables-stored-in-c-and-c))
+
+</details>
+
+```
+#include <iostream>
+
+const int& one() {
+    static const int i = 1;
+    return i;
+}
+
+int main()
+{
+    const int& ref = one();
+    std::cout << ref << std::endl;
+    return 0;
+}
+```
+
+<details><summary> Snippet 6 Analysis </summary>
+
+- Compiles and is safe.
+- Same as above, but instead of using the string literal with a default static
+  storage duration, explicitly specify the int declaration as such.
+- Side note: will also be stored in the DATA segment of memory
 
 </details>
