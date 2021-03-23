@@ -1,8 +1,10 @@
 # Temporaries & Pointers
+
 A fun C++ puzzle from jnewbery
 
-
 #### Which of the following compile & are safe?
+
+##### 1)
 
 ```
 #include <iostream>
@@ -18,20 +20,19 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 1 Analysis </summary>
+<details><summary> Analysis </summary>
 
 - Doesn't compile: `error: non-const lvalue reference to type 'int' cannot bind
   to a temporary of type 'int'`.
 - `ref` is a non-const lvalue reference to type 'int', `one()` returns a
   temporary of type 'int'.
-- The temporary only exists until it falls out of scope, so would be
-  problematic if `ref` were to try to access it beyond the stack lifetime of
-  the temporary created by the `one()` return value. The compiler detects the
-  possiblity of a dangling reference and returns an error.
+- The temporary is destroyed as the last step of evaluating the `one()` expression , so would be
+  problematic if `ref` were to try to access it beyond that lifeteime. Binding the temporary to 
+  a non-const lvalue reference is therefore not allowed.
 
 </details>
 
-
+##### 2)
 
 ```
 #include <iostream>
@@ -47,18 +48,20 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 2 Analysis </summary>
+
+<details><summary> Analysis </summary>
 
 - Compiles and is safe.
 - Even though this code creates a reference to a temporary object, the C++
   language specifies an exception: `The lifetime of a temporary object may be
   extended by binding to a const lvalue reference or to an rvalue reference`
   [link](https://en.cppreference.com/w/cpp/language/lifetime#Temporary_object_lifetime).
-- Since `ref` is a `const lvalue reference`, the compiler is able to extend the
-  lifetime of the temporary returned by `one()` and bind it to the lifetime of
-  `ref`.
+- Since `ref` is a `const lvalue reference`, the lifetime of the temporary returned by
+  `one()` is extended until `ref` is out of scope.
 
 </details>
+
+##### 3)
 
 ```
 #include <iostream>
@@ -74,7 +77,8 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 3 Analysis </summary>
+
+<details><summary> Analysis </summary>
 
 - Compiles but is unsafe, throws `warning: returning reference to local
   temporary object`.
@@ -83,6 +87,8 @@ int main()
 - Question: why does this warn instead of error?
 
 </details>
+
+##### 4)
 
 ```
 #include <iostream>
@@ -98,15 +104,17 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 4 Analysis </summary>
+<details><summary> Analysis </summary>
 
 - Doesn't compile: `error: non-const lvalue reference to type 'int' cannot bind
   to a temporary of type 'int'`
-- The mismatch of type occurs at the `return 1` statement, `1` is a temporary
-  and the function `one()` tried to return `int&`, which is a non-const lvalue
+- This is the same error as in **(1)**, but the mismatch of type occurs at the `return 1` statement.
+  `1` is a temporary and the function `one()` tried to return `int&`, which is a non-const lvalue
   reference.
 
 </details>
+
+##### 5)
 
 ```
 #include <iostream>
@@ -122,17 +130,18 @@ int main()
     return 0;
 }
 ```
-<details><summary> Snippet 5 Analysis </summary>
+<details><summary> Analysis </summary>
 
 - Compiles and is safe.
 - String literals have static storage duration, so the string "one" will exist
   for the duration of the program. Thus `ref` can safely refer to this part of
   memory.
-- Side note: it will be stored in the DATA segment of memory, which is separate
-  from the heap or the stack. ([stack overflow
-  explanation](https://stackoverflow.com/questions/93039/where-are-static-variables-stored-in-c-and-c))
+- Side note: it will be stored in the [DATA segment of memory](https://stackoverflow.com/questions/93039/where-are-static-variables-stored-in-c-and-c),
+  which is separate from the heap or the stack.
 
 </details>
+
+##### 6)
 
 ```
 #include <iostream>
@@ -150,7 +159,7 @@ int main()
 }
 ```
 
-<details><summary> Snippet 6 Analysis </summary>
+<details><summary> Analysis </summary>
 
 - Compiles and is safe.
 - Same as above, but instead of using the string literal with a default static
