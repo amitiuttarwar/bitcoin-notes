@@ -1,6 +1,6 @@
 ## Removing mempool transactions
 
-MemPoolRemovalReasons:
+#### MemPoolRemovalReasons:
 ```
     EXPIRY,      //!< Expired from mempool
     SIZELIMIT,   //!< Removed in size limiting
@@ -10,5 +10,10 @@ MemPoolRemovalReasons:
     REPLACED,    //!< Removed for replacement
 ```
 
-Code paths for each reason:
+#### Code paths for each reason:
 <img src="images/mempool-removal-reasons.jpg">
+
+#### Removing for reorg:
+1. Conflicts -> eg. miner 1 saw tx A, new block includes tx B which RBFs tx A.
+2. Finality -> eg. new tip has more work but smaller height & now the coinbase
+   spend is premature. Or other finality rules like CLTV are not met.
