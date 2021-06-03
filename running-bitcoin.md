@@ -1,11 +1,3 @@
-## Current TODOs:
-- install ccache
-- update to use bitcoind daemon command
-- install berkeleydb to compile with wallet
-- enable logging through conf file
-  - where do I find all options for conf file?
-- make custom mempool expiry / size
-
 ## Monitor & Interact with a running bitcoin node
 - watch logs: `tail -f stdout.log`
 - default data dir for linux: `~/.bitcoin/`
