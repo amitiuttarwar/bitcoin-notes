@@ -19,12 +19,13 @@
   * addresses passed in are forwarded to `ThreadOpenConnections`, and the node
     does not make connections using the addrman
   * param interactions: disables `-listen` and `-dnsseed`
-  * `-connect=0` is (special
-    cased)[https://github.com/bitcoin/bitcoin/blob/master/src/init.cpp#L1755]
+  * `-connect=0` is [special
+    cased](https://github.com/bitcoin/bitcoin/blob/master/src/init.cpp#L1755)
     to not disable `ThreadOpenConnections`. still upholds the parameter
     interactions
   * `-connect` without an argument will try to connect to an empty string
   * `-noconnect` sets `-connect=false`
+
   Q: does this have any parameter interaction with `-dnsseed`?
   * passing `-noconnect=0` gives a warning about the double negative, but
     doesn't prevent the node from starting up. the parameter parsing turns this
