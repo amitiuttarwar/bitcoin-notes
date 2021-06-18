@@ -8,7 +8,7 @@ These are compile time checks that use clang to prevent race conditions and dead
 
 ### Uses
 - `GUARDED_BY` & `EXCLUSIVE_LOCKS_REQUIRED` declares the caller _must_ hold the
-given capabilities. 
+given capabilities.
 - `LOCKS_EXCLUDED` declares the caller _must not_ hold the given capabilities.
 However, it is an optional attribute, so can lead to some false negatives.
 Example:
@@ -30,17 +30,26 @@ class Foo {
 }
 ```
 
-- `REQUIRES(!mu)` is a [negative requirement](https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#negative), which is an alternative that provides stronger safety guarantees than the `EXCLUDES`. It is off by default & enabled by passing `-Wthread-safety-negative`.
-
+- `REQUIRES(!mu)` is a [negative
+  capability](https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#negative),
+  which is an alternative that provides stronger safety guarantees than the
+  `EXCLUDES`. It is off by default & enabled by passing
+  `-Wthread-safety-negative`. The goal of negative capabilities is to prevent
+  double locking.
+- Negative lock annotations only make sense for mutexes that are private
+  members.
+- Relevant conversations:
+  [1](https://github.com/bitcoin/bitcoin/pull/20272#issuecomment-720755781),
+  [2](https://github.com/bitcoin/bitcoin/pull/21598)
 
 ### Quirk of Thread Safety Annotations
 - Unexpected behavior with redundant annotations in the following ordering:
 ```
 1. function declaration annotates `EXCLUSIVE_LOCKS_REQUIRED(lock1)`
 2. caller invokes function
-3. function definition annotates `EXCLUSIVE_LOCKS_REQUIRED(lock 1, lock2)`
+3. function definition annotates `EXCLUSIVE_LOCKS_REQUIRED(lock1, lock2)`
 ```
-- The compiler will not warn about lock2.
+- The compiler will not warn about `lock2`.
 - The same issue can occur if the annotations are on the definition & the caller
 is earlier in the file.
 - The solution is to only annotate the function declaration.
