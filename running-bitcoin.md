@@ -28,7 +28,7 @@ logging:
     \"mempool\"]"` to enable net & mempool log categories 
 
 useful tricks:
-- number of connections by type: `bitcoin-cli getpeerinfo | grep connection.type | sort | uniq -c`
+- number of connections by type: `src/bitcoin-cli getpeerinfo | grep connection.type | sort | uniq -c`
 
 ## Start a Bitcoin node from scratch on Unix machine
 1. Generate a new SSH key and add to ssh-agent ([docs](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
