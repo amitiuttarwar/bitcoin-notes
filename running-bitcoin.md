@@ -20,7 +20,7 @@ The main invocation is: `src/bitcoin-cli [RPC COMMAND]`
 docs:
 - `src/bitcoin-cli -help` to see command-line options
 - `src/bitcoin-cli help` to see list of RPC commands
-- `src/bitcoin-cli [RPC] --help` to see help man for RPC command
+- `src/bitcoin-cli help [RPC]` to see help man for RPC command
 
 logging:
 - `logging` to see what categories are enabled
