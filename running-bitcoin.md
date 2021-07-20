@@ -1,15 +1,10 @@
 ## Monitor & Interact with a running bitcoin node
 - watch logs: `tail -f stdout.log`
-- default data dir for linux: `~/.bitcoin/`
-- `src/bitcoin-cli [RPC COMMAND]`
-  - `logging` to see what categories are enabled
-  - `src/bitcoin-cli -rpcuser=user -rpcpassword=password logging "[\"net\",
-    \"mempool\"]"` to enable net & mempool log categories
-  - `bitcoin-cli getpeerinfo | grep bound | sort | uniq -c` to see number of
-    connections by type (false = outbound, true = inbound)
-- [bitcoin/files.md](https://github.com/bitcoin/bitcoin/blob/master/doc/files.md) great docs of all the explanations
 
-## Startup options
+- [bitcoin/files.md](https://github.com/bitcoin/bitcoin/blob/master/doc/files.md) great docs of all the explanations
+  - default data dir for linux: `~/.bitcoin/`
+
+## `bitcoind` Startup options
 To view the options: `bitcoind -help` & `bitcoind -help-debug`
 
 You can implicitly negate arguments using `-no[arg]`. In the code, this is done by [AppInitMain](https://github.com/bitcoin/bitcoin/blob/ea5a50f92a6ff81b1d2dd67cdc3663e0e66733ac/src/bitcoind.cpp#L43),
@@ -19,12 +14,18 @@ which calls through to
 [InterpretOption](https://github.com/bitcoin/bitcoin/blob/ea5a50f92a6ff81b1d2dd67cdc3663e0e66733ac/src/util/system.cpp#L209)
 to handle the negation.
 
+## `bitcoin-cli` 
+The main invocation is: `src/bitcoin-cli [RPC COMMAND]`
+
+- `logging` to see what categories are enabled
+- `src/bitcoin-cli -rpcuser=user -rpcpassword=password logging "[\"net\",
+    \"mempool\"]"` to enable net & mempool log categories 
+- `bitcoin-cli getpeerinfo | grep connection.type | sort | uniq -c` to see number of connections by type 
 
 ## Start a Bitcoin node from scratch on Unix machine
 1. Generate a new SSH key and add to ssh-agent ([docs](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
 ```bash
-ssh-keygen -t ed25519 -C "amiti@uttarwar.org" // generate a key to
-~/.ssh/id_ed25519{.pub}
+ssh-keygen -t ed25519 -C "amiti@uttarwar.org" // generate a key to ~/.ssh/id_ed25519{.pub}
 eval "$(ssh-agent -s)" // start ssh agent
 ssh-add ~/.ssh/id_ed25519 // add private key to ssh agent
 ```
