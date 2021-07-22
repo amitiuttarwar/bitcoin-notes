@@ -27,7 +27,7 @@ int main()
 - `ref` is a non-const lvalue reference to type 'int', `one()` returns a
   temporary of type 'int'.
 - The temporary is destroyed as the last step of evaluating the `one()` expression , so would be
-  problematic if `ref` were to try to access it beyond that lifeteime. Binding the temporary to 
+  problematic if `ref` were to try to access it beyond that lifetime. Binding the temporary to
   a non-const lvalue reference is therefore not allowed.
 
 </details>
