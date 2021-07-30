@@ -14,6 +14,11 @@ which calls through to
 [InterpretOption](https://github.com/bitcoin/bitcoin/blob/ea5a50f92a6ff81b1d2dd67cdc3663e0e66733ac/src/util/system.cpp#L209)
 to handle the negation.
 
+These are the set of options available to set in the `bitcoin.conf` file.
+
+If a value is set in `bitcoin.conf` & you also pass it in through cli, the cli
+one will overwrite the `.conf` param.
+
 ## `bitcoin-cli`
 The main invocation is: `src/bitcoin-cli [RPC COMMAND]`
 
