@@ -7,9 +7,15 @@
   specific params in a previous restart do not.
 
 ## IP addresses
+- `192.0.0.8` is good to use in the tests because they are IPv4 dummy addresses
+  per RFC7600.
 - It's recommended to use addresses in the block `192.0.2.0/24` for testing
   purposes (RFC 5735). -> so between `192.0.2.0` and `192.0.2.255`. Because 24
   bits are allocated for the network prefix, leaving 8 bits for the host
   addressing.
-- However, the addrman code identifies these as invalid, so we're unable to use
-  them in our tests.
+- However, `CNetAddr::IsValid()` specifically filters this IP range. So tests
+  need different ip addresses to make it into the addrman.
+
+## Links
+- IANA IPv4 Special-Purpose Address Registry: [link](https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml)
+- More conversation: [link](https://github.com/bitcoin/bitcoin/pull/22098#discussion_r680236317)
