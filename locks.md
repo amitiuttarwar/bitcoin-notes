@@ -3,7 +3,7 @@ These are compile time checks that use clang to prevent race conditions and dead
 - Macro defined in `threadsafety.h`
 - Only runs when compiled with the clang static analysis tool,
   `-Wthread-safety` option (or other `-Wthread...` options)
-- To run in bitcoin core, `./configure --with-sanitizers=thread`
+- To run in bitcoin core, `./configure --enable-debug`
 - One of its shortcomings is that it does not check constructors.
 - Clang [documentation](https://clang.llvm.org/docs/ThreadSafetyAnalysis.html) about thread safety analysis
 
