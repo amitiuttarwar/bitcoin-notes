@@ -19,3 +19,11 @@
 ## Links
 - IANA IPv4 Special-Purpose Address Registry: [link](https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml)
 - More conversation: [link](https://github.com/bitcoin/bitcoin/pull/22098#discussion_r680236317)
+
+## Mine a block
+```
+  blockhash = self.nodes[2].generate(1)[0]
+  block_hex = self.nodes[2].getblock(blockhash=blockhash, verbosity=0)
+  block = from_hex(CBlock(), block_hex)
+  block.rehash()
+```
