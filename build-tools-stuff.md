@@ -27,3 +27,7 @@
 **question: what boost am I using?**
 
 Can use `otool -L src/bitcoind` to discover the library paths
+
+### Debugging Tools:
+`git clean -fx` -> get a really fresh state, removes most untracked files
+adding `-d` -> also includes directories, which means it will remove depends
