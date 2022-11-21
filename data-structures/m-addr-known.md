@@ -6,4 +6,4 @@
 `RelayAddrsWithConn`
 - PR: #21528
 
-<img src="images/addr-known.jpg" align="middle"></img>
+<img src="/images/addr-known.jpg" align="middle"></img>
