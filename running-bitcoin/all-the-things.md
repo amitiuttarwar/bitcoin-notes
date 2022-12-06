@@ -4,22 +4,7 @@
 - [bitcoin/files.md](https://github.com/bitcoin/bitcoin/blob/master/doc/files.md) great docs of all the explanations
   - default data dir for linux: `~/.bitcoin/`
 
-## `bitcoind` Startup options
-To view the options: `bitcoind -help` & `bitcoind -help-debug`
-
-You can implicitly negate arguments using `-no[arg]`. In the code, this is done by [AppInitMain](https://github.com/bitcoin/bitcoin/blob/ea5a50f92a6ff81b1d2dd67cdc3663e0e66733ac/src/bitcoind.cpp#L43),
-which invokes
-[ParseParameters](https://github.com/bitcoin/bitcoin/blob/ea5a50f92a6ff81b1d2dd67cdc3663e0e66733ac/src/util/system.cpp#L338)
-which calls through to
-[InterpretOption](https://github.com/bitcoin/bitcoin/blob/ea5a50f92a6ff81b1d2dd67cdc3663e0e66733ac/src/util/system.cpp#L209)
-to handle the negation.
-
-These are the set of options available to set in the `bitcoin.conf` file.
-
-If a value is set in `bitcoin.conf` & you also pass it in through cli, the cli
-one will overwrite the `.conf` param.
-
-## `bitcoin-cli`
+## Bitcoin CLI
 The main invocation is: `src/bitcoin-cli [RPC COMMAND]`
 
 docs:
@@ -72,6 +57,23 @@ make -j5
 sudo apt install daemonize
 daemonize -c $HOME -e stderr.log -o stdout.log $HOME/bitcoin/src/bitcoind -txindex -debug=mempool,net,bench
 ```
+
+6. (optional) Install binaries in `bin` directory - `make install` will identify
+   the appropriate directory for your operating system & copy the binaries from
+   `src/`. This allows users to invoke the binaries from anywhere.
+
+## Misc tricks for advanced usage
+(thanks @josibake!)
+- You can set a prefix for the bitcoin binaries when running configure.
+  `./configure --program-prefix=tx_tutorial_`. This is useful if you are trying
+  to compile multiple versions for different usecases.
+
+- If you have a custom directory where you want to keep the binaries, you can
+  add the directory to your path variable to make it callable from anywhere.
+  Then you can set it with (example directory) `./configure
+  --bindir=$HOME/bitcoin-bins/bin` so `make install` will install binaries into
+  that folder instead of the default location.
+
 
 ## Setting up a server
 - add ssh key: `echo “[SSH KEY]” >> ~/.ssh/authorized_keys`
