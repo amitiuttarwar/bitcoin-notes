@@ -35,6 +35,13 @@ ssh-add ~/.ssh/id_ed25519 // add private key to ssh agent
 3. Get bitcoin core
 `git clone git@github.com:bitcoin/bitcoin.git`
 
+if git isn't available, update apt & install git
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install git
+```
+
 4. Build bitcoin ([docs](https://github.com/bitcoin/bitcoin/blob/master/doc/build-unix.md))
 ```bash
 cd bitcoin
