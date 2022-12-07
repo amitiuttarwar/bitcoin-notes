@@ -35,7 +35,7 @@ ssh-add ~/.ssh/id_ed25519 // add private key to ssh agent
 3. Get bitcoin core
 `git clone git@github.com:bitcoin/bitcoin.git`
 
-if git isn't available, update apt & install git
+- if git isn't available, update apt & install git
 ```bash
 sudo apt update
 sudo apt upgrade
@@ -62,7 +62,7 @@ make -j5
 5. Run bitcoind
 ```bash
 sudo apt install daemonize
-daemonize -c $HOME -e stderr.log -o stdout.log $HOME/bitcoin/src/bitcoind -txindex -debug=mempool,net,bench
+daemonize -c $HOME -e stderr.log -o stdout.log $HOME/bitcoin/src/bitcoind
 ```
 
 6. (optional) Install binaries in `bin` directory - `make install` will identify
