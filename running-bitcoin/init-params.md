@@ -50,3 +50,37 @@ unexpected behaviors:
   * passing `-noconnect=0` gives a warning about the double negative, but
     doesn't prevent the node from starting up. this gets turned  into
     `-connect=1` and the node tries to connect to a peer with the ip `1`.
+
+## Modes of operation
+#### `-blocksonly`:
+* Help docs: Whether to reject transactions from network peers. Automatic
+broadcast and rebroadcast of any transactions from inbound peers is disabled,
+unless the peer has the 'forcerelay' permission. RPC transactions are not
+affected. Defaults off.
+* Parameter interactions: `-whitelistrelay`. If `blocksonly` is enabled,
+`whitelistrelay` gets disabled.
+* blocksonly mode doesn't initialize `node.fee_estimator`
+* blocksonly mode skips `MaybeSetPeerAsAnnouncingHeaderAndIDs` -> don't request
+  high-bandwidth mode from peers. the mempool doesn't have txns to reconstruct
+  compact blocks
+* skip general compact block functionalities
+* when processing the `VERSION` message, will not send `SENDTXRCNCL` message ->
+  erlay
+* will not send `FEEFILTER` message
+* value can be seen on `getnetworkinfo` in the field `localrelay`
+* the `VERSION` message has a `relay` bool to communicate to your peers whether
+  or not to send transactions
+* relay bool in `VERSION` message has interactions with `filterload` and
+  `filterclear` -> BIP37
+* we disconnect peers that send p2p messages: `SENDTXRCNCL`, `TX`, `INV` for a
+  tx unless it has 'relay' permissions set
+* interaction with relay permissions -> peers with the relay or forcerelay flag
+  set can still send transactions
+* you can set these permissions using `-whitelistforcerelay` and
+  `-whitelistrelay` init params
+* still participates in `ADDR` relay, also can send out `TX` messages. but
+  that's a significant privacy leak.
+* advantage is lower bandwidth usage
+
+* Q: Is there no way to set relay/forcerelay params via RPC?
+* Q: How much space does the mempool take in blocksonly mode, vs normal?
