@@ -69,7 +69,17 @@ daemonize -c $HOME -e stderr.log -o stdout.log $HOME/bitcoin/src/bitcoind
    the appropriate directory for your operating system & copy the binaries from
    `src/`. This allows users to invoke the binaries from anywhere.
 
-## Misc tricks for advanced usage
+## Monitoring a bitcoin server
+Useful commands:
+- `dstat` -> useful for cpu usage, disk usage & network traffic
+- `top`, `df -h` & `du -h`
+- `du -h -d 1 | sort -h` -> sorted overview of folders & memory usage
+- `du -S $HOME -h | sort -h` -> sorted breakdown of folders & memory usage
+
+Misc commands:
+- `lsblk` to see device names
+
+## Misc `configure` tricks
 (thanks @josibake!)
 - You can set a prefix for the bitcoin binaries when running configure.
   `./configure --program-prefix=tx_tutorial_`. This is useful if you are trying
