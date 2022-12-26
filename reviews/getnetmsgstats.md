@@ -1,6 +1,6 @@
 ## on master
 
-### declarations
+### relevant classes & variables
 `net.h`:
 ```
 using mapMsgTypeSize = std::map</* message type */ std::string, /* total bytes */ uint64_t>;
@@ -108,3 +108,12 @@ otherwise.
   the `m_total_bytes_sent_mutex` lock?
 - `SocketSendData` has the `EXCLUSIVE_LOCKS_REQUIRED` annoation, but usually
   that gets paired with the `AssertLockHeld`. Should that be added?
+
+## considering..
+- locking: should the new receive stats reuse the `cs_vRecv` lock, or steer clear?
+also impacts logic in `CNode::ReceiveMsgBytes`
+- `CNode::ReceiveMsgBytes` changes - combine with updating `CNode` receive
+  stats
+- I think `m_msgtype_bytes_recv` & `m_msgtype_bytes_sent` are unnecessary &
+  just leftover from the previous version (updating `getnettotals`). This info
+  should now be covered in `m_netmsg_stats_recv` & `m_netmsg_stats_sent`
