@@ -1,6 +1,7 @@
-## on master
 
-### relevant classes & variables
+<img src="/images/send&receive.jpg" align="middle"></img>
+
+### relevant classes & variables for send & receive stats
 `net.h`:
 ```
 using mapMsgTypeSize = std::map</* message type */ std::string, /* total bytes */ uint64_t>;
@@ -42,7 +43,7 @@ private:
 };
 ```
 
-### lifecycles
+### lifecycles of these variables
 `CNode.nSendBytes` & `CNode.nRecvBytes`:
 - initialized to 0 & guarded by the `cs_vSend` & `cs_vRecv` locks respectively
 - `CConnman::SocketSendData` increments `nSendBytes`. the whole function
@@ -100,14 +101,6 @@ private:
 -> `at` throws an exception if element doesn't exist, returns reference
 otherwise.
 -> `find` returns an iterator either to the element, or to `map::end()`
-
-
-### open questions
-- what are `nSentSize` and `nSendOffset`?
-- why can `nTotalBytesRecv` be atomic, but `nTotalBytesSent` needs to be under
-  the `m_total_bytes_sent_mutex` lock?
-- `SocketSendData` has the `EXCLUSIVE_LOCKS_REQUIRED` annoation, but usually
-  that gets paired with the `AssertLockHeld`. Should that be added?
 
 ## considering..
 - locking: should the new receive stats reuse the `cs_vRecv` lock, or steer clear?
