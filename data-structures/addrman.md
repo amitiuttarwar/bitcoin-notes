@@ -1,5 +1,15 @@
 # Addrman learnings
 
+### addrman startup
+- a diagram showing the lifecycle of the bitcoind process reading from & writing
+to `peers.dat`. also shows configuration  options that relate to addrman & what
+they entail
+- keywords: `checkaddrman`, `-addrmantest`, `-connect`, `m_specified_outgoing`,
+  `m_use_addrman_outgoing`, `LoadAddrman`, `DumpPeerAddresses`, addrman
+  serialization, `addrdb.cpp`
+
+<img src="/images/addrman-startup.jpg" align="middle"></img>
+
 ### classes & their member vars
 - `CNetAddr` - raw info of a network address
   - `m_addr` - raw representation (network byte order) of the network address
