@@ -18,9 +18,9 @@ the values of 0.
 
 **Question:** In the case where the `FastRandomContext::FastRandomContext(bool
 fDeterministic)` constructor is used with the bool as false, what does `rng`
-aka the `ChaCha20` get initialized to? -> the usage indicates this is how it
-actually gets assigned randomness, but I don’t follow how the implementation
-actually does that.
+aka the `ChaCha20` get initialized to? -> `requires_seed` gets set for
+`fDeterministic`, so that will make sure the seed gets set before it does stuff
+in `randbytes`
 
 There is a `FastRandomContext` constructor where you can initialize with an
 explicit seed, only meant for testing. That simply invokes
@@ -29,3 +29,15 @@ explicit seed, only meant for testing. That simply invokes
 The places in the code initializing a `FastRandomContext` don’t pass any params
 into the constructor, which will invoke the `bool` constructor setting
 `fDeterministic` to `false`.
+
+`SeedInsecureRand` -> controlled randomization
+
+An init param removing randomness would be risky to expose because if anyone
+actually used it in production, it would be a security leak.
+
+To have addrman determinism from the functional tests, we could initialize an
+addrman with a `peers.dat` with 0 addresses because the `nKey` would get
+deserialized.
+
+Another strategy for functional tests is, eg. instead of having 2 addresses in
+addrman, add 10 then check that the results are >5 or such.
