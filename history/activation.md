@@ -96,7 +96,7 @@
 - These pieces of information are used to advance blocks through the state
   machine:
 
-<img src="images/bip9_state_machine.png" align="middle"></img>
+<img src="/images/bip9_state_machine.png" align="middle"></img>
 
 - At the beginning of each retarget period, the state is recalculated based on
   the previous state and other relevant information (signalling, params, MTP,

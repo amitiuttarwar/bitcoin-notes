@@ -11,7 +11,7 @@
 ```
 
 #### Code paths for each reason:
-<img src="images/mempool-removal-reasons.jpg">
+<img src="/images/mempool-removal-reasons.jpg">
 
 #### Removing for reorg:
 1. Conflicts -> eg. miner 1 saw tx A, new block includes tx B which RBFs tx A.
