@@ -1,13 +1,15 @@
-## Eviction logic
+## ThreadSocketHandler
 
 `ThreadSocketHandler` accepts new connections, sends & receives data from
 sockets & services nodes marked for disconnection.
+
+<img src="/images/thread-socket-handler.jpg" align="middle"></img>
 
 - functions: `DisconnectNodes`, `SocketHandler`, `DeleteNode`,
   `AcceptConnection`, `CreateNodeFromAcceptedSocket`, `InitializeNode`
 - keywords: eviction, disconnect, `fDisconnect`
 
-<img src="/images/thread-socket-handler.jpg" align="middle"></img>
+## Eviction
 
 The next diagram is an overview of eviction logic in bitcoin core. There are
 many places where peers are marked for disconnect that are not captured in this
@@ -23,10 +25,10 @@ an attacker from trivially overtaking all the available slots. Inbound
 diversity looks at net groups, ping time, relaying novel mempool transactions,
 relaying novel blocks, and duration of connection.
 
+<img src="/images/eviction-overview.jpg" align="middle"></img>
+
 - functions: `CheckForStaleTipAndEvictPeers`, `EvictExtraOutboundPeers`,
   `AcceptConnection`, `AttemptToEvictConnection`, `SelectNodeToEvict`,
-
-<img src="/images/eviction-overview.jpg" align="middle"></img>
 
 Color scheme:
 <img src="/images/eviction-color-key.jpg" align="middle"></img>
