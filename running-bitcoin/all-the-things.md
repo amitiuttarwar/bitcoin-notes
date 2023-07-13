@@ -80,7 +80,9 @@ Misc commands:
 - `lsblk` to see device names
 
 ## Misc `configure` tricks
-(thanks @josibake!)
+- To remove boost compile warnings, pass `-enable-suppress-external-warnings`
+  as a `./configure` flag
+
 - You can set a prefix for the bitcoin binaries when running configure.
   `./configure --program-prefix=tx_tutorial_`. This is useful if you are trying
   to compile multiple versions for different usecases.
