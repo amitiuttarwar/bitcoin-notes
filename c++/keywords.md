@@ -7,3 +7,8 @@
   `inline`)
 - If an extern variable is initialized, the extern keyword is ignored because a
   declaration with an initializer is a definition.
+
+### semaphores
+- semaphores can be used for thread safety. they are fundamentally different
+  than atomics because if there isn't enough of the resource, it can tell the
+  thread to "wait in line", and let it resume once there is availability.
