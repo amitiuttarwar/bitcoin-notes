@@ -14,8 +14,9 @@ docs:
 
 logging:
 - `logging` to see what categories are enabled
-- `src/bitcoin-cli -rpcuser=user -rpcpassword=password logging "[\"net\",
-    \"mempool\"]"` to enable net & mempool log categories
+- `bitcoin-cli logging "[\"net\", \"mempool\"]"` to enable net & mempool log categories
+- `"[\"\"]"` is the empty param
+- `bitcoin-cli logging [include] [exclude]`
 
 useful tricks:
 - number of connections by type: `src/bitcoin-cli getpeerinfo | grep connection.type | sort | uniq -c`
