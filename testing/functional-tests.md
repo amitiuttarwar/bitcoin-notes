@@ -16,9 +16,13 @@
 - However, `CNetAddr::IsValid()` specifically filters this IP range. So tests
   need different ip addresses to make it into the addrman.
 
-## Links
 - IANA IPv4 Special-Purpose Address Registry: [link](https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml)
 - More conversation: [link](https://github.com/bitcoin/bitcoin/pull/22098#discussion_r680236317)
+
+## Debugging tools
+- run the test with `--nocleanup` flag and then
+  `test/functional/combine_logs.py -c` to see the logs from the latest run
+
 
 ## Mine a block
 ```
